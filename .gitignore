@@ -1,0 +1,7 @@
+target
+downloads
+.idea
+.settings
+.classpath
+.project
+*.iml

@@ -1,0 +1,36 @@
+dn: ou=People,dc=infinispan,dc=org
+objectclass: top
+objectclass: organizationalUnit
+ou: People
+
+dn: cn=ISPN Admin,ou=People,dc=infinispan,dc=org
+changetype: add
+cn: ISPN Admin
+objectClass: user
+#userAccountControl: 66048
+#accountExpires: 9223372036854775807
+samAccountName: admin
+
+dn: cn=ISPN Writer,ou=People,dc=infinispan,dc=org
+changetype: add
+cn: ISPN Writer
+objectClass: user
+#userAccountControl: 66048
+#accountExpires: 9223372036854775807
+samAccountName: writer
+
+dn: cn=ISPN Reader,ou=People,dc=infinispan,dc=org
+changetype: add
+cn: ISPN Reader
+objectClass: user
+#userAccountControl: 66048
+#accountExpires: 9223372036854775807
+samAccountName: reader
+
+dn: cn=ISPN Unprivileged,ou=People,dc=infinispan,dc=org
+changetype: add
+cn: ISPN Unprivileged
+objectClass: user
+#userAccountControl: 66048
+#accountExpires: 9223372036854775807
+samAccountName: unprivileged

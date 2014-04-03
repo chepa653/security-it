@@ -1,0 +1,135 @@
+# Users
+dn: ou=People,dc=infinispan,dc=org
+objectClass: organizationalUnit
+objectClass: top
+ou: People
+
+dn: uid=krbtgt,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: KDC Service
+sn: Service
+uid: krbtgt
+userPassword: secret
+krb5PrincipalName: krbtgt/INFINISPAN.ORG@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=ldap,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: LDAP
+sn: Service
+uid: ldap
+userPassword: randall
+krb5PrincipalName: ldap/localhost@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=spnego,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: SPNEGO
+sn: Service
+uid: spnego
+userPassword: hackpwd
+krb5PrincipalName: spnego/localhost@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=admin,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: ISPN Admin
+sn: Admin
+mail: admin@INFINISPAN.ORG
+uid: admin
+userPassword: strong_password
+krb5PrincipalName: admin@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=writer,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: ISPN Writer
+sn: Writer
+mail: writer@INFINISPAN.ORG
+uid: writer
+userPassword: some_password
+krb5PrincipalName: writer@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=reader,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Ispn Reader
+sn: Reader
+mail: reader@INFINISPAN.ORG
+uid: reader
+userPassword: password
+krb5PrincipalName: reader@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+dn: uid=unprivileged,ou=People,dc=infinispan,dc=org
+objectClass: top
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: krb5principal
+objectClass: krb5kdcentry
+cn: Ispn Unprivileged
+sn: Unprivileged
+mail: unprivileged@INFINISPAN.ORG
+uid: unprivileged
+userPassword: weak_password
+krb5PrincipalName: unprivileged@INFINISPAN.ORG
+krb5KeyVersionNumber: 0
+
+# Roles
+dn: ou=Roles,dc=infinispan,dc=org
+objectClass: top
+objectClass: organizationalUnit
+ou: Roles
+
+dn: cn=admin,ou=Roles,dc=infinispan,dc=org
+objectClass: top
+objectClass: groupOfNames
+cn: admin
+description: the admin role
+member: uid=admin,ou=People,dc=infinispan,dc=org
+
+dn: cn=writer,ou=Roles,dc=infinispan,dc=org
+objectClass: groupOfNames
+objectClass: top
+cn: writer
+description: the writer role
+member: uid=writer,ou=People,dc=infinispan,dc=org
+
+dn: cn=reader,ou=Roles,dc=infinispan,dc=org
+objectClass: top
+objectClass: groupOfNames
+cn: reader
+description: the reader role
+member: uid=reader,ou=People,dc=infinispan,dc=org
+
+dn: cn=unprivileged,ou=Roles,dc=infinispan,dc=org
+objectClass: top
+objectClass: groupOfNames
+cn: unprivileged
+description: the unprivileged role
+member: uid=unprivileged,ou=People,dc=infinispan,dc=org
+

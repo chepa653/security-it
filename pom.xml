@@ -1,0 +1,329 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.infinispan</groupId>
+    <artifactId>infinispan-security-integrationtests</artifactId>
+    <version>7.0.0.Alpha2</version>
+    <name>Integration tests: Security Tests</name>
+    <description>Integration tests: Security Tests</description>
+
+    <properties>
+        <version.wildfly>8.0.0.Final</version.wildfly>
+        <url.eap>http://download.eng.rdu2.redhat.com/devel/candidates/JBEAP</url.eap>
+        <main.class>org.infinispan.integration.security.utils.KdcServer</main.class>
+        <main.argument>start</main.argument>
+
+        <ldap.file>${project.basedir}/src/main/resources/ispn-msad.ldif</ldap.file>
+        <ldap.host>ad.infinispan.org</ldap.host>
+        <ldap.port>389</ldap.port>
+        <ldap.user>INFINISPAN\vchepeli</ldap.user>
+        <ldap.password>pa$$$$w0rd</ldap.password>
+        <ldap.base.dn>dc=infinispan,dc=org</ldap.base.dn>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+            <version>7.0.0.Alpha2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.1.2.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>8.0.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.directory.server</groupId>
+            <artifactId>apacheds-all</artifactId>
+            <version>2.0.0-M16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.picketbox</groupId>
+            <artifactId>jbosssx-bare</artifactId>
+            <version>4.0.20.Final</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/*.keytab</exclude>
+                </excludes>
+            </testResource>
+
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.keytab</include>
+                    <include>krb5.conf</include>
+                </includes>
+                <targetPath>${project.build.directory}/wildfly-${version.wildfly}/standalone/configuration</targetPath>
+            </testResource>
+        </testResources>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+
+            <!-- This plugin permits the execution of this SpnegoServer through mvn exec:java command -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>${main.class}</mainClass>
+                    <arguments>
+                        <argument>${main.argument}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <!-- Force use of JUnit, since TestNG+Arquillian break in wonderful ways -->
+                    <testNGArtifactName>none:none</testNGArtifactName>
+                    <forkMode>once</forkMode>
+                    <skipTests>false</skipTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-test-libs</id>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <includeScope>test</includeScope>
+                            <outputDirectory>${project.build.directory}/test-libs</outputDirectory>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wildfly</groupId>
+                                    <artifactId>wildfly-dist</artifactId>
+                                    <version>${version.wildfly}</version>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>security-subsystem</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <transformationSets>
+                        <transformationSet>
+                            <dir>${project.build.directory}/wildfly-${version.wildfly}/standalone/configuration</dir>
+                            <includes>
+                                <include>standalone.xml</include>
+                            </includes>
+                            <outputDir>${project.build.directory}/wildfly-${version.wildfly}/standalone/configuration
+                            </outputDir>
+                            <stylesheet>${project.basedir}/src/test/resources/xslt/security-domain.xsl
+                            </stylesheet>
+                            <parameters>
+                                <parameter>
+                                    <name>ldap.domain.name</name>
+                                    <value>LDAP</value>
+                                </parameter>
+                                <parameter>
+                                    <name>krb5.domain.name</name>
+                                    e
+                                    <value>KRB5</value>
+                                </parameter>
+                                <parameter>
+                                    <name>spnego.domain.name</name>
+                                    <value>SPNEGO</value>
+                                </parameter>
+                                <parameter>
+                                    <name>keytab.file</name>
+                                    <value>spnego.keytab</value>
+                                    <!--file:///-->
+                                </parameter>
+                            </parameters>
+                            <fileMappers>
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
+                                    <pattern>^(.*)\.xml$</pattern>
+                                    <replacement>$1-secured.xml</replacement>
+                                </fileMapper>
+                            </fileMappers>
+                        </transformationSet>
+                    </transformationSets>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>msad</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <id>populate</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <!--add to LDAP-->
+                                        <echo>ldapadd -f ${ldap.file} -x -h ${ldap.host} -p ${ldap.port} -D
+                                            "${ldap.user}"
+                                            -w ${ldap.password} -c
+                                        </echo>
+                                        <exec executable="ldapadd" failonerror="false" outputproperty="ldapadd.log">
+                                            <arg value="-f"/>
+                                            <arg value="${ldap.file}"/>
+                                            <arg value="-x"/>
+                                            <arg value="-h"/>
+                                            <arg value="${ldap.host}"/>
+                                            <arg value="-p"/>
+                                            <arg value="${ldap.port}"/>
+                                            <arg value="-D"/>
+                                            <arg value="${ldap.user}"/>
+                                            <arg value="-w"/>
+                                            <arg value="${ldap.password}"/>
+                                            <arg value="-c"/>
+                                        </exec>
+                                        <echo>${ldapadd.log}</echo>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>cleanup</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <tasks>
+                                        <!--cleanup LDAP-->
+                                        <echo>ldapdelete -x -r -h ${ldap.host} -p ${ldap.port} -D "${ldap.user}" -w
+                                            ${ldap.password} ${ldap.base.dn}
+                                        </echo>
+                                        <exec executable="ldapdelete" failonerror="false"
+                                              outputproperty="ldapdelete.log">
+                                            <arg value="-x"/>
+                                            <arg value="-r"/>
+                                            <arg value="-h"/>
+                                            <arg value="${ldap.host}"/>
+                                            <arg value="-p"/>
+                                            <arg value="${ldap.port}"/>
+                                            <arg value="-D"/>
+                                            <arg value="${ldap.user}"/>
+                                            <arg value="-w"/>
+                                            <arg value="${ldap.password}"/>
+                                            <arg value="${ldap.base.dn}"/>
+                                        </exec>
+                                        <echo>${ldapdelete.log}</echo>
+                                    </tasks>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

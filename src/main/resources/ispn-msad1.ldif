@@ -1,0 +1,96 @@
+dn: OU=People,DC=infinispan,DC=org
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: People
+distinguishedName: OU=People,DC=infinispan,DC=org
+instanceType: 4
+whenCreated: 20140415064421.0Z
+whenChanged: 20140415064421.0Z
+uSNCreated: 37030
+uSNChanged: 37030
+name: People
+objectGUID:: 5LezF5WVDEmMGgdamE67+A==
+objectCategory: 
+ CN=Organizational-Unit,CN=Schema,CN=Configuration,DC=infinispan,DC=org
+dSCorePropagationData: 16010101000000.0Z
+
+dn: CN=ISPN Admin,OU=People,DC=infinispan,DC=org
+changetype: add
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: ISPN Admin
+distinguishedName: CN=ISPN Admin,OU=People,DC=infinispan,DC=org
+name: ISPN Admin
+objectGUID:: Zfr64korfkCYJKqucZn+cw==
+codePage: 0
+countryCode: 0
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAA2rFYKYEgqYrPENRXgQAAA==
+sAMAccountName: admin
+sAMAccountType: 805306368
+userPrincipalName: admin@infinispan.org
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=infinispan,DC=org
+msDS-SupportedEncryptionTypes: 0
+
+dn: CN=ISPN Writer,OU=People,DC=infinispan,DC=org
+changetype: add
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: ISPN Writer
+distinguishedName: CN=ISPN Writer,OU=People,DC=infinispan,DC=org
+name: ISPN Writer
+objectGUID:: 2WkALKy0yUCwFdLNbDHNoQ==
+codePage: 0
+countryCode: 0
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAA2rFYKYEgqYrPENRXwQAAA==
+sAMAccountName: writer
+sAMAccountType: 805306368
+userPrincipalName: writer@infinispan.org
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=infinispan,DC=org
+msDS-SupportedEncryptionTypes: 0
+
+dn: CN=ISPN Reader,OU=People,DC=infinispan,DC=org
+changetype: add
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: ISPN Reader
+distinguishedName: CN=ISPN Reader,OU=People,DC=infinispan,DC=org
+name: ISPN Reader
+objectGUID:: 89LTbYGkUkiWpMHzfN7Vjg==
+codePage: 0
+countryCode: 0
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAA2rFYKYEgqYrPENRYAQAAA==
+sAMAccountName: reader
+sAMAccountType: 805306368
+userPrincipalName: reader@infinispan.org
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=infinispan,DC=org
+msDS-SupportedEncryptionTypes: 0
+
+dn: CN=ISPN Unprivileged,OU=People,DC=infinispan,DC=org
+changetype: add
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: user
+cn: ISPN Unprivileged
+distinguishedName: CN=ISPN Unprivileged,OU=People,DC=infinispan,DC=org
+name: ISPN Unprivileged
+objectGUID:: 7jLVcVCn50iSs+hdRpjgvg==
+codePage: 0
+countryCode: 0
+primaryGroupID: 513
+objectSid:: AQUAAAAAAAUVAAAAA2rFYKYEgqYrPENRYQQAAA==
+sAMAccountName: unprivileged
+sAMAccountType: 805306368
+userPrincipalName: unprivileged@infinispan.org
+objectCategory: CN=Person,CN=Schema,CN=Configuration,DC=infinispan,DC=org
+msDS-SupportedEncryptionTypes: 0
